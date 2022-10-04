@@ -15,33 +15,86 @@ body {
     text-align: center;
     width: auto;
     max-height: 10vh;
-    border:#0f0 solid 5px;
 }
 .top-logo{
     max-height: 10vh;
+}
+.center{
+    border:#0ff solid 5px;
+    display: flex;
 }
 .left-pane{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center;
-    display: inline-block;
+    text-align: left;
     width: 15%;
     height: auto;
     border: #BC1142 solid 5px;
 }
 .content{
-    margin-left: 1%;
-    display: inline-block;
-    max-width: 80%;
-    width: auto;
+    padding-left: 15px;
+    width: 100%;
     height: auto;
     border: #00f solid 5px;
 }
 .menu{
+    padding-left: 10px;
     font-size: 14pt;
     border: #00f solid 5px;
 }
+.footer{
+    text-align: center;
+}
+.login{
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.input{
+    width: 200px;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #BC1142;
+    background-color: #F7F7F7;
+    color: #777777;
+    border-radius: 30px;
+}
+.input:focus {
+    color: #BC1142;
+    outline: none;
+}
+.button{
+    width: 100px;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #BC1142;
+    background-color: #BC1142;
+    color: #FFF;
+    border-radius: 30px;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: #ff0048;
+    color: #FFF;
+}
+.button:active {
+    background-color: #BC1142;
+}
+.button:focus {
+    outline: none;
+}
 #centerText{
     text-align: center;
+}
+#justifyCenter{
+    justify-content: center;
+}
+#color{
+    color: #BC1142;
 }
