@@ -32,6 +32,9 @@ body {
     height: auto;
     border: #BC1142 solid 5px;
 }
+.left-pane a{
+    text-decoration: none;
+}
 .content{
     padding-left: 15px;
     width: 100%;
@@ -39,9 +42,15 @@ body {
     border: #00f solid 5px;
 }
 .menu{
-    padding-left: 10px;
+    text-decoration: none;
+    padding: 5px 0px 5px 10px;
     font-size: 14pt;
-    border: #00f solid 5px;
+    color: #BC1142;
+    border-radius: 30px;
+}
+.menu:hover{
+    color: #ff0048;
+    background-color: #FFF;
 }
 .footer{
     text-align: center;
@@ -89,8 +98,16 @@ body {
 .button:focus {
     outline: none;
 }
-#centerText{
+.hr{
+    width: 90%;
+    color: #BC1142;
+    background-color: #BC1142;
+    height: 1px;
+    border-width:0;
+}
+#dynamicName{
     text-align: center;
+    color: #BC1142;
 }
 #justifyCenter{
     justify-content: center;
