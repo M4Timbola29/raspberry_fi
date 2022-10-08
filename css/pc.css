@@ -105,6 +105,9 @@ body {
     height: 1px;
     border-width:0;
 }
+.errorMessage{
+    color: #F00;
+}
 #dynamicName{
     text-align: center;
     color: #BC1142;
