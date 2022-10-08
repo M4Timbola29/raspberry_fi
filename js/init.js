@@ -1,5 +1,9 @@
 const auth = new Auth();
 
-document.querySelector(".logout").addEventListener("click", (e) => {
-    auth.logOut();
-});
+try {
+    document.querySelector(".logout").addEventListener("click", (e) => {
+        auth.logOut();
+    });
+} catch (error) {
+    console.log("Error: Logout button not available!");
+}
