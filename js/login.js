@@ -38,7 +38,6 @@ class Login {
             this.setStatus(field, null, "success");
         }
     }
-    //status message fix
     setStatus(field, message, status) {
         const errorMessage = field.parentElement.querySelector(".errorMessage");
         if (status == "success" && this.errors == 0) {
