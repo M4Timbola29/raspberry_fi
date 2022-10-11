@@ -1,0 +1,11 @@
+{
+  "name": "Raspberry_Fi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/M4Timbola29/raspberry_fi.git",
+  "author": "Ruben Principe",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-js": "^4.1.1"
+  }
+}
