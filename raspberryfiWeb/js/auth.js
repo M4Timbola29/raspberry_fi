@@ -14,7 +14,6 @@ class Auth {
             if (currentPath != loginPath) {
                 window.location.replace(loginPath);
             }
-            document.querySelector("body").style.display = "block";
         } else {
             if (currentPath != homePath) {
                 window.location.replace(homePath);

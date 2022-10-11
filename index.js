@@ -1,7 +1,6 @@
-const http = require("http");
+var express = require('express');
+var app = express();
 
-http.createServer(function(req, res) {
-    res.write("Hello world!");
-    res.end();
-  })
-  .listen(8080);
+app.use(express.static('raspberryfiWeb'));
+
+var server = app.listen(80);
