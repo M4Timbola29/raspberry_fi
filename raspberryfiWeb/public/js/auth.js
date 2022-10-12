@@ -4,7 +4,6 @@ const currentPath = window.location.pathname;
 
 class Auth {
     constructor() {
-        //document.querySelector("body").style.display = "none";
         const auth = localStorage.getItem("auth");
         this.validateAuth(auth);
     }

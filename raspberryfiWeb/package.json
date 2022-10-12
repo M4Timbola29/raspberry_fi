@@ -1,12 +1,17 @@
 {
-  "name": "Raspberry_Fi",
+  "name": "raspberry_fi",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/M4Timbola29/raspberry_fi.git",
   "author": "Ruben Principe",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "crypto-js": "^4.1.1",
     "express": "^4.18.2"
+  },
+  "scripts": {
+    "start": "sudo nodemon index.js",
+    "prod": "node index.js"
   }
 }
