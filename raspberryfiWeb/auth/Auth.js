@@ -1,11 +1,9 @@
-import SHA256 from "crypto-js/sha256";
+const sha256 = require("crypto-js/sha256");
 
 class Auth {
 	constructor() {}
 	init() {
-		var encrypted = SHA256("Admin");
+		var encrypted = sha256("admin");
 		console.log(encrypted);
 	}
 }
-
-export default Auth
