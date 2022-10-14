@@ -7,3 +7,7 @@ class Auth {
 		console.log(encrypted);
 	}
 }
+
+const auth = new Auth();
+
+module.exports = auth;
