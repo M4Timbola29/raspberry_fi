@@ -17,4 +17,4 @@ app.get('/', function (req, res) {
 app.use(express.static('public'));
 
 var server = app.listen(port);
-console.log("Running on port: ", port);
+console.log("Running on port:", port);
