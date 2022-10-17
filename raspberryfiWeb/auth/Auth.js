@@ -1,12 +1,12 @@
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 
-//get from form
-let username = "admin";
-let password = "admin";
+const defUsername = "admin";
+const defPassword = "admin";
 
-let secret = null;
-let hash = null;
+let formUsername = "admin";
+let formPassword = "admin";
+
 const path = "./raspberryfi.auth";
 
 class Auth {
@@ -14,80 +14,122 @@ class Auth {
 	init() {
 		this.main();
 	}
-	async main() { 
-		await this.getFileData()
-		//not waiting
-		console.log(username);
-		console.log(hash);
-		console.log(secret);
-
-		if (username != null && secret != null && hash != null) {
-			//credCompare();
-			console.log("compare");
-		} else {
-			secret = await this.secretGen();
-			hash = await this.hashGen(password, secret);
-			await this.writeFile(username + "\n" + hash + "\n" + secret);
-			//credCompare();
-		}
-	}
-	async getFileData() {
-		let bool = await this.checkFileExists();
+	async main() {
 		try {
-			if (bool == true) {
-				fs.readFile(path, { encoding: "utf-8" }, function (err, data) {
-					if (!err) {
-						const formatedData = data.split(/\r?\n/);
-						username = formatedData[0];
-						hash = formatedData[1];
-						secret = formatedData[2];
+			const { username, secret, hash } = await this.getFileData();
+			if (username != null && secret != null && hash != null) {
+				const bool = await this.credCompare(username, hash);
+				if (bool) {
+					//give token
+					console.log("Auth success");
+				} else {
+					console.log("Auth failed");
+				}
+			} else {
+				const newSecret = await this.secretGen();
+				const newHash = await this.hashGen(defPassword, newSecret);
+
+				this.writeFile(defUsername + "\n" + newHash + "\n" + newSecret).then(
+					async function () {
+						const bool = await this.credCompare(username, hash);
+						if (bool) {
+							//give token
+							console.log("Auth success");
+						} else {
+							console.log("Auth failed");
+						}
+					},
+					function (err) {
+						console.error(err);
 					}
-				});
+				);
 			}
 		} catch (error) {
-			console.error("Error getting file data!");
+			console.error(error);
 		}
 	}
-	async writeFile(data) {
-		let bool = await this.checkFileExists();
-		if (bool == true) {
-			fs.writeFile(path, data, (err) => {
-				if (err) console.log("Error writing new data!");
-				else {
-					return;
-				}
-			});
-		} else {
-			console.log("Error getting file data!");
-		}
-	}
-	async checkFileExists() {
-		try {
-			if (fs.existsSync(path)) {
-				return true;
-			} else {
-				try {
-					fs.open(path, "wx", function (err, fd) {
-						//handle error
-						fs.close(fd, function (err) {
-							//handle error
-						});
+	getFileData() {
+		return new Promise((resolve, reject) => {
+			this.checkFileExists().then(
+				function () {
+					fs.readFile(path, { encoding: "utf-8" }, function (err, data) {
+						if (!err) {
+							const formatedData = data.split(/\r?\n/);
+							const username = formatedData[0];
+							const hash = formatedData[1];
+							const secret = formatedData[2];
+							resolve({ username, hash, secret });
+						} else {
+							console.error("Error reading file data!");
+							reject(err);
+						}
 					});
-					return true;
-				} catch (error) {
-					console.error("Error creating the file!");
-					return false;
+				},
+				function (err) {
+					console.error("Error getting file!", err);
+					reject(err);
 				}
+			);
+		});
+	}
+	writeFile(data) {
+		return new Promise((resolve, reject) => {
+			this.checkFileExists().then(
+				function () {
+					fs.writeFile(path, data, (err) => {
+						if (err) {
+							console.log("Error writing new data!");
+							reject(err);
+						} else {
+							resolve();
+						}
+					});
+				},
+				function (err) {
+					console.error("Error getting file data!");
+					reject(err);
+				}
+			);
+		});
+	}
+	checkFileExists() {
+		return new Promise((resolve, reject) => {
+			try {
+				if (fs.existsSync(path)) {
+					resolve();
+					//return true;
+				} else {
+					fs.open(path, "wx", function (err, fd) {
+						if (err) {
+							console.error("Error opening the file!");
+							reject(err);
+						} else {
+							fs.close(fd, function (err) {
+								if (err) {
+									console.error("Error closing the file!");
+									reject(err);
+								} else {
+									resolve();
+									//return true;
+								}
+							});
+						}
+					});
+				}
+			} catch (err) {
+				console.error("Error getting the file!");
+				reject(err);
+				//return false;
 			}
-		} catch (err) {
-			console.error("Error getting the file!");
+		});
+	}
+	async credCompare(username, hash) {
+		const isMatch = await bcrypt.compare(formPassword, hash);
+		if (isMatch && username == formUsername) {
+			return true;
+		} else {
 			return false;
 		}
-	}
-	async credCompare() {
-		//get username
-		//get password
-		//get secret
 	}
 	async hashGen(password, secret) {
 		const hash = await bcrypt.hash(password, secret);
