@@ -4,14 +4,17 @@ const fs = require("fs");
 const defUsername = "admin";
 const defPassword = "admin";
 
-let formUsername = "admin";
-let formPassword = "admin";
+let formUsername = null;
+let formPassword = null;
 
 const path = "./raspberryfi.auth";
 
 class Auth {
 	constructor() {}
 	init() {
+		//get formusername and formpassword from index.js
+		//not working
+		console.log(formUsername, formPassword);
 		this.main();
 	}
 	async main() {
@@ -21,9 +24,11 @@ class Auth {
 				const bool = await this.credCompare(username, hash);
 				if (bool) {
 					//give token
-					console.log("Auth success");
+					console.log("Authentication successful!");
+					return true;
 				} else {
-					console.log("Auth failed");
+					console.log("Authentication failed!");
+					return false;
 				}
 			} else {
 				const newSecret = await this.secretGen();
@@ -34,9 +39,9 @@ class Auth {
 						const bool = await this.credCompare(username, hash);
 						if (bool) {
 							//give token
-							console.log("Auth success");
+							console.log("Authentication successful!");
 						} else {
-							console.log("Auth failed");
+							console.log("Authentication failed!");
 						}
 					},
 					function (err) {
@@ -97,7 +102,6 @@ class Auth {
 			try {
 				if (fs.existsSync(path)) {
 					resolve();
-					//return true;
 				} else {
 					fs.open(path, "wx", function (err, fd) {
 						if (err) {
@@ -110,7 +114,6 @@ class Auth {
 									reject(err);
 								} else {
 									resolve();
-									//return true;
 								}
 							});
 						}
@@ -119,15 +122,19 @@ class Auth {
 			} catch (err) {
 				console.error("Error getting the file!");
 				reject(err);
-				//return false;
 			}
 		});
 	}
 	async credCompare(username, hash) {
-		const isMatch = await bcrypt.compare(formPassword, hash);
-		if (isMatch && username == formUsername) {
-			return true;
-		} else {
+		try {
+			const isMatch = await bcrypt.compare(formPassword, hash);
+			if (isMatch && username == formUsername) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (err) {
+			console.error("Error comparing credentials!");
 			return false;
 		}
 	}

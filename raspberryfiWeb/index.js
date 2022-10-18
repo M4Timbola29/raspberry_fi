@@ -1,20 +1,40 @@
-const auth = require('./auth/Auth')
-var path = require('path');
-const port = 80
+const auth = require("./auth/Auth");
+const path = require("path");
+const port = 80;
 
-var express = require('express');
-var app = express();
+const express = require("express");
+const app = express();
 
-app.get('/html/login/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/html/login/index.html'));
-    auth.init();
+app.get("/html/login/", function (req, res) {
+	res.sendFile(path.join(__dirname + "/public/html/login/index.html"));
 });
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/index.html'));
+app.get("/", function (req, res) {
+	res.sendFile(path.join(__dirname + "/public/index.html"));
 });
 
-app.use(express.static('public'));
+app.post("/html/login", function (req, res) {
+	req.on("data", function (data) {
+		const formatedData = data.toString().split(",");
+		const username = formatedData[0].split(":")[1];
+		const password = formatedData[1].split(":")[1];
+		auth.formUsername = username.substring(1, username.length - 1);
+		auth.formPassword = password.substring(1, password.length - 2);
+		//send variables to auth.js
+		//not working
+		console.log(auth.formUsername, auth.formPassword);
 
-var server = app.listen(port);
-console.log("Running on port:", port);
+		if (auth.init()) {
+			res.status(200).send("Authentication successful!");
+			res.redirect("/");
+		} else {
+			res.status(401).send("Authentication failed!");
+		}
+	});
+});
+
+app.use(express.static("public"));
+
+app.listen(port, function () {
+	console.log("Server listening on port: " + port);
+});
