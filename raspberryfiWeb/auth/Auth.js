@@ -4,53 +4,75 @@ const fs = require("fs");
 const defUsername = "admin";
 const defPassword = "admin";
 
-let formUsername = null;
-let formPassword = null;
-
 const path = "./raspberryfi.auth";
 
 class Auth {
 	constructor() {}
-	init() {
-		//get formusername and formpassword from index.js
-		//not working
-		console.log(formUsername, formPassword);
-		this.main();
-	}
-	async main() {
+	async init(formUsername, formPassword) {
 		try {
-			const { username, secret, hash } = await this.getFileData();
-			if (username != null && secret != null && hash != null) {
-				const bool = await this.credCompare(username, hash);
+			const main = await this.main(formUsername, formPassword);
+			if (main) {
+				//return token
+				return true;
+			} else {
+				return false;
+			}
+		} catch (error) {
+			console.log("Error initializing authentication!");
+		}
+	}
+	async main(formUsername, formPassword) {
+		try {
+			const { username, hash } = await this.getFileData();
+			if (username != null && hash != null) {
+				const bool = await this.credCompare(
+					username,
+					hash,
+					formUsername,
+					formPassword
+				);
 				if (bool) {
-					//give token
-					console.log("Authentication successful!");
 					return true;
 				} else {
-					console.log("Authentication failed!");
 					return false;
 				}
 			} else {
 				const newSecret = await this.secretGen();
 				const newHash = await this.hashGen(defPassword, newSecret);
 
-				this.writeFile(defUsername + "\n" + newHash + "\n" + newSecret).then(
-					async function () {
-						const bool = await this.credCompare(username, hash);
-						if (bool) {
-							//give token
-							console.log("Authentication successful!");
-						} else {
-							console.log("Authentication failed!");
+				const bool = await this.writeFile(defUsername + "\n" + newHash).then(
+					async () => {
+						try {
+							const bool = await this.credCompare(
+								defUsername,
+								newHash,
+								formUsername,
+								formPassword
+							);
+							if (bool) {
+								return true;
+							} else {
+								return false;
+							}
+						} catch (err) {
+							console.error("Error getting file data!");
+							console.error(err);
 						}
 					},
 					function (err) {
-						console.error(err);
+						console.error("Error writing new data!");
+						//console.error(err);
 					}
 				);
+				if (bool) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		} catch (error) {
-			console.error(error);
+			console.log("Error getting file data!");
+			//console.error(error);
 		}
 	}
 	getFileData() {
@@ -62,8 +84,7 @@ class Auth {
 							const formatedData = data.split(/\r?\n/);
 							const username = formatedData[0];
 							const hash = formatedData[1];
-							const secret = formatedData[2];
-							resolve({ username, hash, secret });
+							resolve({ username, hash });
 						} else {
 							console.error("Error reading file data!");
 							reject(err);
@@ -125,7 +146,7 @@ class Auth {
 			}
 		});
 	}
-	async credCompare(username, hash) {
+	async credCompare(username, hash, formUsername, formPassword) {
 		try {
 			const isMatch = await bcrypt.compare(formPassword, hash);
 			if (isMatch && username == formUsername) {

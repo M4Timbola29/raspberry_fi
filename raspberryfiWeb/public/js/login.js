@@ -28,10 +28,10 @@ class Login {
 					password,
 				}).then(
 					(response) => {
-						if (response == 1) {
+						if (response == "Authentication successful!") {
 							//write to file and localstorage
-							//localStorage.setItem("auth", 1);
-							//this.form.submit();
+							localStorage.setItem("token", 1);
+							this.form.submit();
 						} else {
 							this.setStatus(
 								document.querySelector(`#${self.fields[0]}`),

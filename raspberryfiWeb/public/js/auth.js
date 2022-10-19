@@ -4,7 +4,7 @@ const currentPath = window.location.pathname;
 
 class Auth {
 	constructor() {
-		const auth = localStorage.getItem("auth");
+		const auth = localStorage.getItem("token");
 		this.validateAuth(auth);
 	}
 	validateAuth(auth) {
@@ -21,7 +21,7 @@ class Auth {
 		}
 	}
 	logOut() {
-		localStorage.removeItem("auth");
+		localStorage.removeItem("token");
 
 		if (currentPath != loginPath) {
 			window.location.replace(loginPath);
