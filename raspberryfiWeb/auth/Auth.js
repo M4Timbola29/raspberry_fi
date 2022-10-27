@@ -23,11 +23,11 @@ class Auth {
 	}
 	async main(formUsername, formPassword) {
 		try {
-			const { username, hash } = await this.getFileData();
-			if (username != null && hash != null) {
+			const { usernameHash, passwordHash } = await this.getFileData();
+			if (usernameHash != null && passwordHash != null) {
 				const bool = await this.credCompare(
-					username,
-					hash,
+					usernameHash,
+					passwordHash,
 					formUsername,
 					formPassword
 				);
@@ -37,15 +37,17 @@ class Auth {
 					return false;
 				}
 			} else {
-				const newSecret = await this.secretGen();
-				const newHash = await this.hashGen(defPassword, newSecret);
+				let newSecret = await this.secretGen();
+				const newUserHash = await this.hashGen(defUsername, newSecret);
+				newSecret = await this.secretGen();
+				const newPassHash = await this.hashGen(defPassword, newSecret);
 
-				const bool = await this.writeFile(defUsername + "\n" + newHash).then(
+				const bool = await this.writeFile(newUserHash + "\n" + newPassHash).then(
 					async () => {
 						try {
 							const bool = await this.credCompare(
-								defUsername,
-								newHash,
+								newUserHash,
+								newPassHash,
 								formUsername,
 								formPassword
 							);
@@ -56,7 +58,7 @@ class Auth {
 							}
 						} catch (err) {
 							console.error("Error getting file data!");
-							console.error(err);
+							//console.error(err);
 						}
 					},
 					function (err) {
@@ -82,9 +84,9 @@ class Auth {
 					fs.readFile(path, { encoding: "utf-8" }, function (err, data) {
 						if (!err) {
 							const formatedData = data.split(/\r?\n/);
-							const username = formatedData[0];
-							const hash = formatedData[1];
-							resolve({ username, hash });
+							const usernameHash = formatedData[0];
+							const passwordHash = formatedData[1];
+							resolve({ usernameHash, passwordHash });
 						} else {
 							console.error("Error reading file data!");
 							reject(err);
@@ -146,10 +148,11 @@ class Auth {
 			}
 		});
 	}
-	async credCompare(username, hash, formUsername, formPassword) {
+	async credCompare(usernameHash, passwordHash, formUsername, formPassword) {
 		try {
-			const isMatch = await bcrypt.compare(formPassword, hash);
-			if (isMatch && username == formUsername) {
+			const userIsMatch = await bcrypt.compare(formUsername, usernameHash);
+			const passIsMatch = await bcrypt.compare(formPassword, passwordHash);
+			if (userIsMatch && passIsMatch) {
 				return true;
 			} else {
 				return false;
