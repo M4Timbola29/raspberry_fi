@@ -37,10 +37,8 @@ class Auth {
 					return false;
 				}
 			} else {
-				let newSecret = await this.secretGen();
-				const newUserHash = await this.hashGen(defUsername, newSecret);
-				newSecret = await this.secretGen();
-				const newPassHash = await this.hashGen(defPassword, newSecret);
+				const newUserHash = await this.hashGen(defUsername);
+				const newPassHash = await this.hashGen(defPassword);
 
 				const bool = await this.writeFile(newUserHash + "\n" + newPassHash).then(
 					async () => {
@@ -162,8 +160,9 @@ class Auth {
 			return false;
 		}
 	}
-	async hashGen(password, secret) {
-		const hash = await bcrypt.hash(password, secret);
+	async hashGen(cred) {
+		const secret = await this.secretGen();
+		const hash = await bcrypt.hash(cred, secret);
 		return hash;
 	}
 	async secretGen() {
