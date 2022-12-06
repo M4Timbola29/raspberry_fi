@@ -1,5 +1,6 @@
 const auth = require("./auth/Auth");
 const path = require("path");
+const ipaddr = "0.0.0.0";
 const port = 80;
 
 const express = require("express");
@@ -37,6 +38,6 @@ app.post("/html/login", function (req, res) {
 
 app.use(express.static("public"));
 
-app.listen(port, function () {
+app.listen(port, ipaddr, function () {
 	console.log("Server listening on port: " + port);
 });
