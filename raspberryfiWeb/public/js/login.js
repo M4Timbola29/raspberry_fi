@@ -35,7 +35,7 @@ class Login {
 
 							if (data0 == "accessToken") {
 								//write to localstorage Last session
-								localStorage.setItem("Authorization", "Bearer " + data1);
+								localStorage.setItem("authorization", "Bearer " + data1);
 								this.form.submit();
 							} else {
 								this.setStatus(
