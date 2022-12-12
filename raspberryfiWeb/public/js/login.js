@@ -28,17 +28,23 @@ class Login {
 					password,
 				}).then(
 					(response) => {
-						if (response == "Authentication successful!") {
-							//write to file and localstorage
-							localStorage.setItem("token", 1);
-							this.form.submit();
-						} else {
-							this.setStatus(
-								document.querySelector(`#${self.fields[0]}`),
-								`Invalid username or password`,
-								"error"
-							);
-						}
+						try {
+							const data = response.split(":");
+							const data0 = data[0].substring(2, data[0].length - 1);
+							const data1 = data[1].substring(1, data[1].length - 2);
+
+							if (data0 == "accessToken") {
+								//write to localstorage Last session
+								localStorage.setItem("Authorization", "Bearer " + data1);
+								this.form.submit();
+							} else {
+								this.setStatus(
+									document.querySelector(`#${self.fields[0]}`),
+									`Invalid username or password`,
+									"error"
+								);
+							}
+						} catch (error) {}
 					},
 					(error) => {
 						console.error("Error:", error);
