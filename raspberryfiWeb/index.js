@@ -6,8 +6,6 @@ const port = 80;
 const express = require("express");
 const app = express();
 
-require("dotenv").config();
-
 app.use(express.json());
 
 app.get("/html/login/", function (req, res) {
@@ -15,19 +13,15 @@ app.get("/html/login/", function (req, res) {
 });
 
 app.post("/html/login", async function (req, res) {
-	try {
-		const accessToken = await Login.login(req.body).then((data) => {
-			return data;
-		});
-		if (accessToken != null) {
-			res.status(200).json({ accessToken: accessToken });
-		} else {
-			res.status(403).send("Invalid username or password!");
-		}
-	} catch (error) {
-		console.log("Error sending authentication response!");
-		res.status(403).send("Invalid username or password!");
-	}
+	Login.login(req, res);
+});
+
+app.post("/token", (req, res) => {
+	Login.refreshToken(req, res);
+});
+
+app.delete("/logout", (req, res) => {
+	Login.deleteRefreshToken(req, res);
 });
 
 app.get("/", Login.authenticateToken, function (req, res) {

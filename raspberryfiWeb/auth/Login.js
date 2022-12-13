@@ -1,35 +1,60 @@
 const auth = require("./Auth");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+let refreshTokens = [];
 
 class Login {
-	login(data) {
+	login(req, res) {
 		return new Promise(async (resolve, reject) => {
-			const formatedData = JSON.stringify(data).split(",");
-			const username = formatedData[0].split(":")[1];
-			const password = formatedData[1].split(":")[1];
-			const formUsername = username.substring(1, username.length - 1);
-			const formPassword = password.substring(1, password.length - 2);
-			const authInit = await auth.init(formUsername, formPassword);
+			const username = req.body["username"];
+			const password = req.body["password"];
+			const authInit = await auth.init(username, password);
 			try {
 				if (authInit) {
 					//send token
-					const tokenContent = { name: formUsername };
-					const accessToken = jwt.sign(
-						tokenContent,
-						process.env.ACCESS_TOKEN_SECRET
-					);
-					resolve(accessToken);
+					const user = { name: username };
+					const accessToken = this.generateAccessToken(user);
+					const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+					refreshTokens.push(refreshToken);
+					res.status(200).json({
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+					});
+					resolve();
 				} else {
 					console.log("Error sending authentication response!");
+					res.status(403).send("Invalid username or password!");
 					reject();
 				}
 			} catch (error) {
 				console.log("Error sending authentication response!");
-				reject();
+				reject(error);
 			}
 		});
 	}
+	generateAccessToken(user) {
+		return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+			expiresIn: "15m",
+		});
+	}
+
+	refreshToken(req, res) {
+		const refreshToken = req.body.token;
+		if (refreshToken == null) return res.sendStatus(401);
+		if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+			if (err) return res.sendStatus(403);
+			const accessToken = jwt.sign(
+				{ name: user.name },
+				process.env.ACCESS_TOKEN_SECRET,
+				{
+					expiresIn: "15m",
+				}
+			);
+			res.json({ accessToken: accessToken });
+		});
+	}
+
 	authenticateToken(req, res, next) {
 		const authHeader = req.headers["authorization"];
 		const token = authHeader && authHeader.split(" ")[1];
@@ -40,6 +65,14 @@ class Login {
 			req.user = user;
 			next();
 		});
+	}
+
+	deleteRefreshToken(req, res) {
+		if (req.body.token == null) return res.sendStatus(401);
+		if (!refreshTokens.includes(req.body.token)) return res.sendStatus(403);
+		const refreshToken = req.body.token;
+		refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+		res.sendStatus(204);
 	}
 }
 
