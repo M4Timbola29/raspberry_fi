@@ -1,3 +1,4 @@
 #move folder raspberryfi to /etc/
-#move the rest to /var/www/html/
-#install nodejs, npm, yarn as global, build and host the project
+#move raspberryfiWeb to /var/www/html/
+#install nvm, nodejs, npm, yarn as global, build and host the project
+#create .env file in /var/www/html/raspberryfiWeb

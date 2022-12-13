@@ -6,10 +6,11 @@ let refreshTokens = [];
 class Login {
 	login(req, res) {
 		return new Promise(async (resolve, reject) => {
-			const username = req.body["username"];
-			const password = req.body["password"];
-			const authInit = await auth.init(username, password);
 			try {
+				const username = req.body["username"];
+				const password = req.body["password"];
+				const authInit = await auth.init(username, password);
+
 				if (authInit) {
 					//send token
 					const user = { name: username };
@@ -22,16 +23,15 @@ class Login {
 					});
 					resolve();
 				} else {
-					console.log("Error sending authentication response!");
 					res.status(403).send("Invalid username or password!");
-					reject();
 				}
 			} catch (error) {
 				console.log("Error sending authentication response!");
-				reject(error);
+				reject();
 			}
 		});
 	}
+
 	generateAccessToken(user) {
 		return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
 			expiresIn: "15m",
@@ -39,7 +39,7 @@ class Login {
 	}
 
 	refreshToken(req, res) {
-		const refreshToken = req.body.token;
+		const refreshToken = req.body.refreshtoken;
 		if (refreshToken == null) return res.sendStatus(401);
 		if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -56,7 +56,7 @@ class Login {
 	}
 
 	authenticateToken(req, res, next) {
-		const authHeader = req.headers["authorization"];
+		const authHeader = req.headers["jwttoken"];
 		const token = authHeader && authHeader.split(" ")[1];
 		if (token == null) return res.sendStatus(401);
 
@@ -68,11 +68,14 @@ class Login {
 	}
 
 	deleteRefreshToken(req, res) {
-		if (req.body.token == null) return res.sendStatus(401);
-		if (!refreshTokens.includes(req.body.token)) return res.sendStatus(403);
-		const refreshToken = req.body.token;
-		refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-		res.sendStatus(204);
+		if (req.body.refreshtoken == null) return res.sendStatus(401);
+		if (!refreshTokens.includes(req.body.refreshtoken))
+			return res.sendStatus(403);
+		const refreshToken = req.body.refreshtoken;
+		refreshTokens = refreshTokens.filter(
+			(refreshtoken) => refreshtoken !== refreshToken
+		);
+		res.status(200).send("Refresh token deleted!");
 	}
 }
 

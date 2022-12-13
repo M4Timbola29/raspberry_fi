@@ -4,10 +4,7 @@ const currentPath = window.location.pathname;
 
 class Auth {
 	logOut() {
-		localStorage.removeItem("autorization");
-
-		if (currentPath != loginPath) {
-			window.location.replace(loginPath);
-		}
+		localStorage.removeItem("jwtToken");
+		localStorage.removeItem("refreshToken");
 	}
 }

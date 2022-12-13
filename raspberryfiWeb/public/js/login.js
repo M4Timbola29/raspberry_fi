@@ -29,13 +29,10 @@ class Login {
 				}).then(
 					(response) => {
 						try {
-							const data = response.split(":");
-							const data0 = data[0].substring(2, data[0].length - 1);
-							const data1 = data[1].substring(1, data[1].length - 2);
-
-							if (data0 == "accessToken") {
-								//write to localstorage Last session
-								localStorage.setItem("authorization", "Bearer " + data1);
+							const user = JSON.parse(response);
+							if (user.accessToken) {
+								this.storeToken(user.accessToken);
+								this.storeRefreshToken(user.refreshToken);
 								this.form.submit();
 							} else {
 								this.setStatus(
@@ -52,6 +49,19 @@ class Login {
 				);
 			}
 		});
+	}
+
+	storeToken(token) {
+		localStorage.setItem("jwtToken", "Bearer " + token);
+	}
+	storeRefreshToken(token) {
+		localStorage.setItem("refreshToken", token);
+	}
+	getToken() {
+		return localStorage.getItem("jwtToken");
+	}
+	getRefreshToken() {
+		return localStorage.getItem("refreshToken");
 	}
 	createPostRequest(url, data) {
 		return new Promise((resolve, reject) => {

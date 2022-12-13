@@ -12,7 +12,7 @@ app.get("/html/login/", function (req, res) {
 	res.sendFile(path.join(__dirname + "/public/html/login/index.html"));
 });
 
-app.post("/html/login", async function (req, res) {
+app.post("/html/login/", async function (req, res) {
 	Login.login(req, res);
 });
 
@@ -28,7 +28,9 @@ app.get("/", Login.authenticateToken, function (req, res) {
 	res.sendFile(path.join(__dirname + "/public/index.html"));
 });
 
-app.post("/", function (req, res) {});
+app.post("/", function (req, res) {
+	console.log(req);
+});
 
 app.use(express.static("public"));
 
