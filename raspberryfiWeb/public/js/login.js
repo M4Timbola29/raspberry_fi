@@ -2,9 +2,10 @@ class Login {
 	constructor(form, fields) {
 		this.form = form;
 		this.fields = fields;
-		this.validateonSubmit();
 		this.errors = 0;
 		this.host = host;
+		this.homePath = homePath;
+		this.validateonSubmit();
 	}
 
 	validateonSubmit() {
@@ -23,7 +24,7 @@ class Login {
 				const username = document.querySelector(`#${self.fields[0]}`).value;
 				const password = document.querySelector(`#${self.fields[1]}`).value;
 
-				this.createPostRequest(this.host + "html/login", {
+				this.createPostRequest(this.host + this.homePath, {
 					username,
 					password,
 				}).then(
@@ -52,13 +53,13 @@ class Login {
 	}
 
 	storeToken(token) {
-		localStorage.setItem("jwtToken", "Bearer " + token);
+		localStorage.setItem("jwt", "Bearer " + token);
 	}
 	storeRefreshToken(token) {
 		localStorage.setItem("refreshToken", token);
 	}
 	getToken() {
-		return localStorage.getItem("jwtToken");
+		return localStorage.getItem("jwt");
 	}
 	getRefreshToken() {
 		return localStorage.getItem("refreshToken");

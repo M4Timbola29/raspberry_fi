@@ -56,7 +56,7 @@ class Login {
 	}
 
 	authenticateToken(req, res, next) {
-		const authHeader = req.headers["jwttoken"];
+		const authHeader = req.headers["jwt"];
 		const token = authHeader && authHeader.split(" ")[1];
 		if (token == null) return res.sendStatus(401);
 

@@ -1,1 +1,2 @@
-const host = "http://localhost/";
+const host = "http://localhost";
+const homePath = "/";
