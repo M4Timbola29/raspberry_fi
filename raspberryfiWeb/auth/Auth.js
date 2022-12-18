@@ -1,10 +1,7 @@
+require("dotenv").config({ path: "../.env" });
 const bcrypt = require("bcrypt");
 const fs = require("fs");
-
-const defUsername = "admin";
-const defPassword = "admin";
-
-const path = "./raspberryfi.auth";
+const path = process.env.CREDPATH;
 
 class Auth {
 	constructor() {}
@@ -37,8 +34,8 @@ class Auth {
 					return false;
 				}
 			} else {
-				const newUserHash = await this.hashGen(defUsername);
-				const newPassHash = await this.hashGen(defPassword);
+				const newUserHash = await this.hashGen(process.env.DEF_USERNAME);
+				const newPassHash = await this.hashGen(process.env.DEF_PASSWORD);
 
 				const bool = await this.writeFile(newUserHash + "\n" + newPassHash).then(
 					async () => {

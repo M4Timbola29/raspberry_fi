@@ -1,6 +1,6 @@
+require("dotenv").config();
 const auth = require("./Auth");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 let refreshTokens = [];
 
 class Login {
@@ -34,7 +34,7 @@ class Login {
 
 	generateAccessToken(user) {
 		return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-			expiresIn: "15m",
+			expiresIn: process.env.TOKEN_VALIDITY,
 		});
 	}
 
@@ -48,7 +48,7 @@ class Login {
 				{ name: user.name },
 				process.env.ACCESS_TOKEN_SECRET,
 				{
-					expiresIn: "15m",
+					expiresIn: process.env.TOKEN_VALIDITY,
 				}
 			);
 			res.json({ accessToken: accessToken });
