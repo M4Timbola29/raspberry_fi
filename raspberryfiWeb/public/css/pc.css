@@ -1,7 +1,16 @@
+:root {
+    --mainColor: #F3F3F3;
+    --accentColor: #BC1142;
+    --highlightColor: #FF0048;
+    --inputBgColor: #F7F7F7;
+    --inputFontColor: #777777;
+    --menuHoverColor: #777777;
+    --fontColor: #FFF;
+    --errorFontColor: #F00;
+  }
 html {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #F3F3F3;
-    /* background-color: #1F1F1F; */
+    background-color: var(--mainColor);
 }
 body {
     margin: 0px;
@@ -45,12 +54,12 @@ body {
     text-decoration: none;
     padding: 5px 0px 5px 10px;
     font-size: 14pt;
-    color: #BC1142;
+    color: var(--accentColor);
     border-radius: 30px;
 }
 .menu:hover{
-    color: #ff0048;
-    background-color: #FFF;
+    color: var(--highlightColor);
+    background-color: var(--fontColor);
 }
 .footer{
     text-align: center;
@@ -69,12 +78,12 @@ body {
     padding: 10px;
     border: none;
     border-bottom: 2px solid #BC1142;
-    background-color: #F7F7F7;
-    color: #777777;
+    background-color: var(--inputBgColor);
+    color: var(--menuHoverColor);
     border-radius: 30px;
 }
 .input:focus {
-    color: #BC1142;
+    color: var(--accentColor);
     outline: none;
 }
 .button{
@@ -83,35 +92,38 @@ body {
     padding: 10px;
     border: none;
     border-bottom: 2px solid #BC1142;
-    background-color: #BC1142;
-    color: #FFF;
+    background-color: var(--accentColor);
+    color: var(--fontColor);
     border-radius: 30px;
     cursor: pointer;
 }
 .button:hover {
-    background-color: #ff0048;
-    color: #FFF;
+    background-color: var(--highlightColor);
+    color: var(--fontColor);
 }
 .button:active {
-    background-color: #BC1142;
+    background-color: var(--accentColor);
 }
 .button:focus {
     outline: none;
 }
 .hr{
     width: 90%;
-    color: #BC1142;
-    background-color: #BC1142;
+    color: var(--accentColor);
+    background-color: var(--accentColor);
     height: 1px;
     border-width:0;
 }
+.errorMessage{
+    color: var(--errorFontColor);
+}
 #dynamicName{
     text-align: center;
-    color: #BC1142;
+    color: var(--accentColor);
 }
 #justifyCenter{
     justify-content: center;
 }
 #color{
-    color: #BC1142;
+    color: var(--accentColor);
 }
