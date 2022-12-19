@@ -4,7 +4,6 @@ class Login {
 		this.fields = fields;
 		this.errors = 0;
 		this.host = host;
-		this.homePath = homePath;
 		this.loginPath = loginPath;
 		this.validateonSubmit();
 	}
