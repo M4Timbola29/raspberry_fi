@@ -17,10 +17,17 @@ class Login {
 					const accessToken = this.generateAccessToken(user);
 					const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
 					refreshTokens.push(refreshToken);
-					res.status(200).json({
-						accessToken: accessToken,
-						refreshToken: refreshToken,
-					});
+					res
+						.cookie("jwt", accessToken, {
+							httpOnly: true,
+							maxAge: 1000 * 60 * 60 * 24 * 7,
+						})
+						.cookie("refreshToken", refreshToken, {
+							httpOnly: true,
+							maxAge: 1000 * 60 * 60 * 24 * 7,
+						})
+						.status(200)
+						.send("Login successful!");
 					resolve();
 				} else {
 					res.status(403).send("Invalid username or password!");
@@ -56,8 +63,7 @@ class Login {
 	}
 
 	authenticateToken(req, res, next) {
-		const authHeader = req.headers["jwt"];
-		const token = authHeader && authHeader.split(" ")[1];
+		const token = req.cookies.jwt;
 		if (token == null) return res.sendStatus(401);
 
 		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {

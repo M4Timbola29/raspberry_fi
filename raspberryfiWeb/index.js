@@ -1,10 +1,12 @@
 require("dotenv").config();
+const express = require("express");
+const cookieParser = require("cookie-parser");
 const Login = require("./auth/Login");
 const path = require("path");
-const express = require("express");
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/login", function (req, res) {
 	res.sendFile(path.join(__dirname + "/public/html/login/index.html"));

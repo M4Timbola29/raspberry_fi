@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../.env" });
 const bcrypt = require("bcrypt");
 const fs = require("fs");
-const path = process.env.CREDPATH;
+const path = process.env.CRED_PATH;
 
 class Auth {
 	constructor() {}

@@ -5,6 +5,7 @@ class Login {
 		this.errors = 0;
 		this.host = host;
 		this.homePath = homePath;
+		this.loginPath = loginPath;
 		this.validateonSubmit();
 	}
 
@@ -24,16 +25,13 @@ class Login {
 				const username = document.querySelector(`#${self.fields[0]}`).value;
 				const password = document.querySelector(`#${self.fields[1]}`).value;
 
-				this.createPostRequest(this.host + this.homePath, {
+				this.createPostRequest(this.host + this.loginPath, {
 					username,
 					password,
 				}).then(
 					(response) => {
 						try {
-							const user = JSON.parse(response);
-							if (user.accessToken) {
-								this.storeToken(user.accessToken);
-								this.storeRefreshToken(user.refreshToken);
+							if (response == "Login successful!") {
 								this.form.submit();
 							} else {
 								this.setStatus(
@@ -52,18 +50,6 @@ class Login {
 		});
 	}
 
-	storeToken(token) {
-		localStorage.setItem("jwt", "Bearer " + token);
-	}
-	storeRefreshToken(token) {
-		localStorage.setItem("refreshToken", token);
-	}
-	getToken() {
-		return localStorage.getItem("jwt");
-	}
-	getRefreshToken() {
-		return localStorage.getItem("refreshToken");
-	}
 	createPostRequest(url, data) {
 		return new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
