@@ -56,15 +56,21 @@ class Login {
 		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
 			if (err) return res.status(403).redirect("/login");
 			req.user = user;
-			next();
+			return next();
 		});
 	}
 	authenticateTokenLoginPage(req, res) {
 		const token = req.cookies.jwt;
-		if (token == null) return;
+		const refreshToken = req.cookies.refreshToken;
+		if (token == null && refreshToken == null) return;
 
 		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-			if (err) return;
+			if (err) {
+				if (refreshToken != null) {
+					this.refreshToken(req, res);
+				}
+				return;
+			}
 			req.user = user;
 			res.status(200).redirect("/");
 		});
@@ -72,11 +78,12 @@ class Login {
 
 	refreshToken(req, res) {
 		const refreshToken = req.cookies.refreshToken;
-		if (refreshToken == null) return res.sendStatus(401);
-		if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+		if (refreshToken == null) return res.status(401).redirect("/logout");
+		if (!refreshTokens.includes(refreshToken))
+			return res.status(403).redirect("/logout");
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-			if (err) return res.sendStatus(403);
-			const accessToken = jwt.sign(
+			if (err) return res.status(403).redirect("/logout");
+			const token = jwt.sign(
 				{ name: user.name },
 				process.env.ACCESS_TOKEN_SECRET,
 				{
@@ -84,12 +91,12 @@ class Login {
 				}
 			);
 			res
-				.cookie("jwt", accessToken, {
+				.cookie("jwt", token, {
 					httpOnly: true,
 					maxAge: cookieAge,
 				})
 				.status(200)
-				.send("Cookie refreshed!");
+				.redirect("/");
 		});
 	}
 
