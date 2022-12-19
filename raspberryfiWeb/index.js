@@ -17,10 +17,6 @@ app.post("/login", async function (req, res) {
 	Login.login(req, res);
 });
 
-app.post("/refreshToken", (req, res) => {
-	Login.refreshToken(req, res);
-});
-
 app.get("/logout", (req, res) => {
 	Login.deleteRefreshToken(req, res);
 });
