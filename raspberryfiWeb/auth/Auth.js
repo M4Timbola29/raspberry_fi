@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const path = process.env.CRED_PATH;

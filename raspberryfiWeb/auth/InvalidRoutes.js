@@ -1,14 +1,14 @@
-const routes = ["/", "/login", "/logout"];
+const mainRoutes = ["/", "/login", "/logout"];
+const invalidatedRoutes = [
+	"/index.html",
+	"/html/login",
+	"/html/login/index.html",
+];
 
 class InvalidRoutes {
 	constructor() {}
 
 	main(req, res) {
-		for (let i = 0; i < routes.length; i++) {
-			if (req.path == routes[i]) {
-				return;
-			}
-		}
 		res.status(404).redirect("/login");
 	}
 }
