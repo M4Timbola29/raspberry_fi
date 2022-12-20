@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const Login = require("./auth/Login");
+const InvalidateRoutes = require("./auth/InvalidRoutes");
 const path = require("path");
 const app = express();
 
@@ -26,6 +27,10 @@ app.get("/", Login.authenticateToken, function (req, res) {
 });
 
 app.use(express.static("public"));
+
+app.get("*", function (req, res) {
+	InvalidateRoutes.main(req, res);
+});
 
 app.listen(process.env.PORT, process.env.IPADDR, function () {
 	console.log("Server listening on port: " + process.env.PORT);
