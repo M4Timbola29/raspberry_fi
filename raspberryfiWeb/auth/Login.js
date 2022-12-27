@@ -2,7 +2,7 @@ require("dotenv").config();
 const auth = require("./Auth");
 const jwt = require("jsonwebtoken");
 let refreshTokens = [];
-const cookieAge = 1000 * 60 * 60 * 24 * 7;
+const cookieAge = process.env.COOKIE_AGE;
 
 class Login {
 	login(req, res) {
@@ -46,7 +46,9 @@ class Login {
 		});
 	}
 	generateRefreshToken(user) {
-		return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+		return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
+			expiresIn: process.env.REFRESH_TOKEN_VALIDITY,
+		});
 	}
 
 	authenticateToken(req, res, next) {

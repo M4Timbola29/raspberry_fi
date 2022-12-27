@@ -1,4 +1,13 @@
 try {
+	$("#link-gameServers").on("click", (e) => {
+		e.preventDefault();
+
+		$("#dynamicName").text("Game Servers");
+		$(".content").load("/html/gameServers/index.html");
+
+		window.history.pushState("string", "gameServers", "/gameServers");
+	});
+
 	$("#link-settings").on("click", (e) => {
 		e.preventDefault();
 
@@ -10,6 +19,9 @@ try {
 
 	$(() => {
 		switch (window.location.pathname) {
+			case "/gameServers":
+				$(".content").load("/html/gameServers/index.html");
+				break;
 			case "/settings":
 				$(".content").load("/html/settings/index.html");
 				break;

@@ -1,10 +1,3 @@
-const mainRoutes = ["/", "/login", "/logout"];
-const invalidatedRoutes = [
-	"/index.html",
-	"/html/login",
-	"/html/login/index.html",
-];
-
 class InvalidRoutes {
 	constructor() {}
 
