@@ -25,34 +25,39 @@
 	<body>
 		<div class="container">
 			<div class="top">
-				<img
-					class="top-logo"
-					src="./img/logo/raspberryfiLogoAlt.svg"
-					alt="raspberryfiLogo"
-				/>
+				<a href="/" style="cursor: default">
+					<img
+						class="top-logo"
+						src="./img/logo/raspberryfiLogoAlt.svg"
+						alt="raspberryfiLogo"
+					/>
+				</a>
 			</div>
 			<hr />
 			<div class="center">
-				<div class="left-pane">
+				<nav class="left-pane">
 					<h2 id="dynamicName">Welcome!</h2>
 					<hr class="hr" />
-					<a href="#"><div class="menu">Dashboard</div></a>
-					<a href="#"><div class="menu">Wireless</div></a>
-					<a href="#"><div class="menu">DHCP</div></a>
-					<a href="#"><div class="menu">OpenVPN</div></a>
+					<a href="/dashboard" id="link-dashboard">
+						<div class="menu">Dashboard</div>
+					</a>
+					<a href="/wireless" id="link-wireless">
+						<div class="menu">Wireless</div>
+					</a>
+					<a href="/dhcp" id="link-dhcp"><div class="menu">DHCP</div></a>
+					<a href="/openVPN" id="link-openVPN"> <div class="menu">OpenVPN</div></a>
 					<a href="/gameServers" id="link-gameServers">
 						<div class="menu">Game Servers</div>
 					</a>
 					<a href="/settings" id="link-settings"><div class="menu">Settings</div></a>
 					<a href="/logout"><div class="menu">Logout</div></a>
 					<hr class="hr" />
-				</div>
-				<div class="content">
-					<div id="teste"></div>
+				</nav>
+				<main class="content">
 					<h1>Main Page</h1>
 					<h1>Main Page</h1>
 					<h1>Main Page</h1>
-				</div>
+				</main>
 			</div>
 		</div>
 		<footer class="footer">
