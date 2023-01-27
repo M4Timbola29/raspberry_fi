@@ -35,13 +35,13 @@ try {
 		window.history.pushState("string", "openVPN", "/openVPN");
 	});
 
-	$("#link-gameServers").on("click", (e) => {
+	$("#link-docker").on("click", (e) => {
 		e.preventDefault();
 
-		$("#dynamicName").text("Game Servers");
-		$(".content").load("/html/gameServers/index.html");
+		$("#dynamicName").text("Docker");
+		$(".content").load("/html/docker/index.html");
 
-		window.history.pushState("string", "gameServers", "/gameServers");
+		window.history.pushState("string", "docker", "/docker");
 	});
 
 	$("#link-settings").on("click", (e) => {
@@ -67,8 +67,8 @@ try {
 			case "/openVPN":
 				$(".content").load("/html/openVPN/index.html");
 				break;
-			case "/gameServers":
-				$(".content").load("/html/gameServers/index.html");
+			case "/docker":
+				$(".content").load("/html/docker/index.html");
 				break;
 			case "/settings":
 				$(".content").load("/html/settings/index.html");
