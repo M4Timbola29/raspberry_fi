@@ -63,3 +63,18 @@ app.get("*", function (req, res) {
 app.listen(process.env.PORT, process.env.IPADDR, function () {
 	console.log("Server listening on port: " + process.env.PORT);
 });
+
+/*
+.env file
+# Server
+ACCESS_TOKEN_SECRET='255655ced18fc28cf1767d0fa866a093934eca1d640ac1341881cf4caf07b5c64e0f4f8904aa308b0609534e99a99360ae3bd6d1f12ad11e22f95a7bd4c228f9'
+REFRESH_TOKEN_SECRET='e329364d145ab60fad8ab4945f2c7bb5edde9235f90611453dc80f6d4c34f848073a7996c77f5ac34e9181b66dca5f9198c5aa995588e88207afc2af0d5e3abf'
+TOKEN_VALIDITY='15m'
+REFRESH_TOKEN_VALIDITY='24h'
+COOKIE_AGE='86400000' #24h
+DEF_USERNAME='admin'
+DEF_PASSWORD='admin'
+CRED_PATH='./raspberryfi.auth'
+IPADDR='0.0.0.0'
+PORT='80'
+*/
