@@ -16,5 +16,8 @@
   "scripts": {
     "start": "sudo nodemon index.js",
     "prod": "node index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
