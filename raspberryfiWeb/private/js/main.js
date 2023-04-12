@@ -26,6 +26,24 @@ try {
 		window.history.pushState("string", "dhcp", "/dhcp");
 	});
 
+	$("#link-firewall").on("click", (e) => {
+		e.preventDefault();
+
+		$("#dynamicName").text("Firewall");
+		$(".content").load("/html/firewall/index.html");
+
+		window.history.pushState("string", "firewall", "/firewall");
+	});
+
+	$("#link-ftp").on("click", (e) => {
+		e.preventDefault();
+
+		$("#dynamicName").text("FTP");
+		$(".content").load("/html/ftp/index.html");
+
+		window.history.pushState("string", "ftp", "/ftp");
+	});
+
 	$("#link-openVPN").on("click", (e) => {
 		e.preventDefault();
 
@@ -63,6 +81,12 @@ try {
 				break;
 			case "/dhcp":
 				$(".content").load("/html/dhcp/index.html");
+				break;
+			case "/firewall":
+				$(".content").load("/html/firewall/index.html");
+				break;
+			case "/ftp":
+				$(".content").load("/html/ftp/index.html");
 				break;
 			case "/openVPN":
 				$(".content").load("/html/openVPN/index.html");
